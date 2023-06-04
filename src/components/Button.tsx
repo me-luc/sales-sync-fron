@@ -1,12 +1,16 @@
 import styled from 'styled-components';
 
-interface ButtonProps {
-	action: () => void;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+	action?: () => void;
 	text: string;
 }
 
-export function AppButton({ action, text }: ButtonProps) {
-	return <StyledButton onClick={action}>{text}</StyledButton>;
+export function AppButton({ action, text, ...props }: ButtonProps) {
+	return (
+		<StyledButton onClick={action} {...props}>
+			{text}
+		</StyledButton>
+	);
 }
 
 const StyledButton = styled.button`

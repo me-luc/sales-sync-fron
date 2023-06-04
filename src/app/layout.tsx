@@ -1,6 +1,8 @@
 import '@/styles/reset.css';
 import '@/styles/globals.css';
 import { Montserrat, Roboto } from 'next/font/google';
+import { QueryClientWrapper } from '@/context';
+import 'react-toastify/dist/ReactToastify.css';
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['400', '700'] });
 const montserrat = Montserrat({
@@ -19,7 +21,9 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang='en'>
-			<body className={montserrat.className}>{children}</body>
+			<QueryClientWrapper>
+				<body className={montserrat.className}>{children}</body>
+			</QueryClientWrapper>
 		</html>
 	);
 }
