@@ -1,5 +1,5 @@
-import './reset.css';
-import './globals.css';
+import '@/styles/reset.css';
+import '@/styles/globals.css';
 import { Montserrat, Roboto } from 'next/font/google';
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['400', '700'] });
