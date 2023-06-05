@@ -22,7 +22,7 @@
 	--test-color: red;
 }
 
-.icon {
+.icon.input-icon {
 	position: absolute;
 	top: 50%;
 	left: 40px;
