@@ -1,7 +1,9 @@
-export default function SearchIcon() {
+import { IconProps } from '@/types';
+
+export function SearchIcon({ className }: IconProps) {
 	return (
 		<svg
-			className='icon'
+			className={className}
 			width='28'
 			height='28'
 			viewBox='0 0 28 28'

@@ -1,7 +1,9 @@
-export default function FavoriteIcon() {
+import { IconProps } from '@/types';
+
+export function FavoriteIcon({ className }: IconProps) {
 	return (
 		<svg
-			className='icon'
+			className={className}
 			width='27'
 			height='25'
 			viewBox='0 0 27 25'
