@@ -14,8 +14,9 @@ const StyledMobileTopBar = styled.nav`
 	top: 0;
 	left: 0;
 	width: 100vw;
-	height: auto;
-	filter: drop-shadow(0px 1px 6px rgba(0, 0, 0, 0.071));
+	height: var(--bar-height);
+	background: var(--primary-background-color);
+	filter: drop-shadow(0px 3px 10px rgba(52, 58, 58, 0.169));
 
 	padding: 15px 45px;
 	display: flex;

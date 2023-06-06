@@ -1,22 +1,23 @@
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import MobileTopBar from './MobileTopBar';
 import BottomBar from './BottomBar';
 import DestopTopBar from './DesktopTopBar';
-import MobileTopBar from './MobileTopBar';
+import { useResponsive } from '@/hook/useResponsive';
 
 export function ResponsiveBars() {
-	const isMobile = useMediaQuery({ maxWidth: 768 });
-	const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
-	const isDesktop = useMediaQuery({ minWidth: 1024 });
+	const { useMobile, useDesktop, useTablet } = useResponsive();
 
 	return (
 		<>
-			{(isMobile || isTablet) && (
+			{(useMobile || useTablet) && (
 				<>
 					<MobileTopBar />
 					<BottomBar />
 				</>
 			)}
-			{isDesktop && <DestopTopBar />}
+			{useDesktop && <DestopTopBar />}
 		</>
 	);
 }
