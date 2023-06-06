@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	value: string;
-	Icon: React.FC;
+	Icon: React.FC<{ className: string }>;
 	placeholder: string;
 	setValue: (value: string) => void;
 }
@@ -15,7 +15,7 @@ export function AppInput({ value, setValue, Icon, ...props }: InputProps) {
 				value={value}
 				onChange={(e) => setValue(e.target.value)}
 			/>
-			<Icon />
+			<Icon className='icon input-icon' />
 		</StyledContainer>
 	);
 }
