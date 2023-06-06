@@ -1,7 +1,7 @@
 'use client';
 import { AppButton, AppInput, RedirectOption, Logo } from '@/components';
 import { useAuth } from '@/hook/useAuth';
-import UserIcon from '@/icons/user';
+import { PasswordIcon, UserIcon } from '@/icons/';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -35,7 +35,7 @@ export default function Home() {
 					value={password}
 					setValue={setPassword}
 					placeholder='Senha'
-					Icon={UserIcon}
+					Icon={PasswordIcon}
 					type='password'
 					name='password'
 					autoComplete='current-password'
