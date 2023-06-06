@@ -3,3 +3,4 @@ export * from './favorite-icon';
 export * from './home-icon';
 export * from './search-icon';
 export * from './user-icon';
+export * from './password-icon';
