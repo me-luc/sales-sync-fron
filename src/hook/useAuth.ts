@@ -1,7 +1,7 @@
 import * as authApi from '@/service/authApi';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 
 interface SignInParams {
