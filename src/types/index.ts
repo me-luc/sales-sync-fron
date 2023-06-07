@@ -1,1 +1,2 @@
-export * from './icon-types';
+export * from './iconTypes';
+export * from './apiTypes';
