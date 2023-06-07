@@ -1,7 +1,9 @@
-export default function UserIcon() {
+import { IconProps } from '@/types';
+
+export function UserIcon({ className }: IconProps) {
 	return (
 		<svg
-			className='icon'
+			className={className}
 			width='21'
 			height='26'
 			viewBox='0 0 21 26'

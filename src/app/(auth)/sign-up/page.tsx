@@ -1,9 +1,9 @@
 'use client';
 import { AppButton, AppInput, RedirectOption, Logo } from '@/components';
 import { useAuth } from '@/hook/useAuth';
-import UserIcon from '@/icons/user';
+import { PasswordIcon, UserIcon } from '@/icons';
 import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export default function Home() {
 	const [email, setEmail] = useState('');
@@ -53,7 +53,7 @@ export default function Home() {
 					value={password}
 					setValue={setPassword}
 					placeholder='Senha'
-					Icon={UserIcon}
+					Icon={PasswordIcon}
 					type='password'
 					name='password'
 				/>
@@ -61,14 +61,13 @@ export default function Home() {
 					value={confirmPassword}
 					setValue={setConfirmPassword}
 					placeholder='Confirmar senha'
-					Icon={UserIcon}
+					Icon={PasswordIcon}
 					type='password'
 					name='password'
 				/>
 				<AppButton type='submit' text='Sign up' />
 			</form>
 			<RedirectOption href='/sign-in' label='Sign in instead' />
-			<ToastContainer />
 		</main>
 	);
 }

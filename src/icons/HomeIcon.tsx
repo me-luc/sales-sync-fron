@@ -1,7 +1,9 @@
-export default function HomeIcon() {
+import { IconProps } from '@/types';
+
+export function HomeIcon({ className }: IconProps) {
 	return (
 		<svg
-			className='icon'
+			className={className}
 			width='34'
 			height='26'
 			viewBox='0 0 34 26'

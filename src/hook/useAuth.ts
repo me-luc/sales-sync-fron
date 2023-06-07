@@ -1,31 +1,25 @@
-import * as authApi from '@/service/authApi';
+import { AuthenticationContext } from '@/context';
+import { authApi } from '@/service';
+import { SignInParams, SignUpParams } from '@/types';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { useContext } from 'react';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 
-interface SignInParams {
-	email: string;
-	password: string;
-}
-
-interface SignUpParams {
-	email: string;
-	password: string;
-	name: string;
-}
-
 export function useAuth() {
 	const router = useRouter();
+	const { setToken } = useContext(AuthenticationContext);
 
 	const { mutate: signIn } = useMutation(
 		({ email, password }: SignInParams) => authApi.signIn(email, password),
 		{
 			onSuccess: (data) => {
+				setToken(data.data.token);
 				toast.success('Login realizado com sucesso!');
 				router.push('/home');
 			},
-			onError: (error: AxiosError) => {
+			onError: (error) => {
 				toast.error('Credenciais inválidas!');
 			},
 		}
@@ -36,6 +30,7 @@ export function useAuth() {
 			authApi.signUp(email, password, name),
 		{
 			onSuccess: (data) => {
+				console.log(data);
 				toast.success('Cadastro realizado com sucesso!');
 				router.push('/home');
 			},

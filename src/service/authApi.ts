@@ -1,13 +1,13 @@
 import { api } from './api';
 
-export async function signIn(email: string, password: string) {
+async function signIn(email: string, password: string) {
 	return await api.post('/auth/sign-in', {
 		email,
 		password,
 	});
 }
 
-export async function signUp(email: string, password: string, name: string) {
+async function signUp(email: string, password: string, name: string) {
 	return await api.post('/auth/sign-up', {
 		email,
 		password,
@@ -15,6 +15,12 @@ export async function signUp(email: string, password: string, name: string) {
 	});
 }
 
-export async function signOut() {
+async function signOut() {
 	return await api.post('/auth/sign-out');
 }
+
+export const authApi = {
+	signIn,
+	signUp,
+	signOut,
+};
