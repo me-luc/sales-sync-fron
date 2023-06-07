@@ -1,7 +1,7 @@
 import '@/styles/reset.css';
 import '@/styles/globals.css';
 import { Montserrat, Roboto } from 'next/font/google';
-import { QueryClientWrapper } from '@/context';
+import { AuthenticationProvider, QueryClientWrapper } from '@/context';
 import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
 
@@ -36,7 +36,9 @@ export default function RootLayout({
 				<link rel='shortcut icon' href='/favicon.ico' />
 			</Head>
 			<QueryClientWrapper>
-				<body className={montserrat.className}>{children}</body>
+				<AuthenticationProvider>
+					<body className={montserrat.className}>{children}</body>
+				</AuthenticationProvider>
 			</QueryClientWrapper>
 		</html>
 	);

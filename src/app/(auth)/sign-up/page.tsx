@@ -3,7 +3,7 @@ import { AppButton, AppInput, RedirectOption, Logo } from '@/components';
 import { useAuth } from '@/hook/useAuth';
 import { PasswordIcon, UserIcon } from '@/icons';
 import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export default function Home() {
 	const [email, setEmail] = useState('');
@@ -68,7 +68,6 @@ export default function Home() {
 				<AppButton type='submit' text='Sign up' />
 			</form>
 			<RedirectOption href='/sign-in' label='Sign in instead' />
-			<ToastContainer />
 		</main>
 	);
 }
