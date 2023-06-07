@@ -1,4 +1,4 @@
-import { ArrowBackIcon } from '@/icons/arrow-back-icon';
+import { ArrowBackIcon } from '@/icons';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 
