@@ -1,5 +1,6 @@
 'use client';
 import { ResponsiveBars } from '@/components';
+import { AuthLayoutWrapper } from '@/helpers';
 import { useResponsive } from '@/hook/useResponsive';
 import { ToastContainer } from 'react-toastify';
 
@@ -10,7 +11,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
 	const { useMobile } = useResponsive();
 	return (
-		<>
+		<AuthLayoutWrapper>
 			<div
 				className={
 					useMobile ? 'secure-layout-mobile' : 'secure-layout'
@@ -19,6 +20,6 @@ export default function Layout({ children }: LayoutProps) {
 			</div>
 			<ResponsiveBars />
 			<ToastContainer />
-		</>
+		</AuthLayoutWrapper>
 	);
 }
