@@ -6,14 +6,17 @@ import { toast } from 'react-toastify';
 
 export function AuthLayoutWrapper({ children }: { children: ReactNode }) {
 	const [loading, setLoading] = useState(false);
-	const { isAuthenticated } = useContext(AuthenticationContext);
+	const { isAuthenticated, finishedLoading } = useContext(
+		AuthenticationContext
+	);
 	const router = useRouter();
 
 	useEffect(() => {
+		if (!finishedLoading) return;
 		setLoading(true);
 		if (!isAuthenticated) {
 			toast.error('Faça login para acessar essa página.');
-			router.replace('/sign-in');
+			router.push('/sign-in');
 		}
 		setLoading(false);
 	}, [isAuthenticated, router]);

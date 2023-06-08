@@ -30,7 +30,7 @@ export function useAuth() {
 			authApi.signUp(email, password, name),
 		{
 			onSuccess: (data) => {
-				console.log(data);
+				setToken(data.data.token);
 				toast.success('Cadastro realizado com sucesso!');
 				router.push('/home');
 			},
