@@ -23,7 +23,13 @@ export function Product({
 
 	return (
 		<StyledProduct>
-			<img src={imagePath} alt='product image' fill={true} />
+			<Image
+				loader={() => imagePath}
+				src={imagePath}
+				alt='product image'
+				width={100}
+				height={190}
+			/>
 
 			<InfoBox>
 				<Category className={lato.className}>

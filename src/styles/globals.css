@@ -102,14 +102,12 @@ button {
 
 .secure-layout {
 	width: 100%;
-	height: calc(100vh - var(--bar-height) - 60px);
-	margin-top: calc(var(--bar-height) - 30px);
+	padding-top: var(--bar-height);
 }
 
 .secure-layout-mobile {
-	height: calc(100vh - var(--bar-height));
-	margin-top: calc(var(--bar-height) - 30px);
-	margin-bottom: var(--bar-height);
+	padding-top: var(--bar-height);
+	padding-bottom: var(--bar-height);
 }
 
 .invisible {
