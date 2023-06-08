@@ -7,6 +7,17 @@ export interface ProductParams {
 	description?: string;
 }
 
+export interface Product {
+	id: string;
+	name: string;
+	price: number;
+	quantity: number;
+	photo?: string;
+	supplier?: string;
+	description?: string;
+	category?: string;
+}
+
 export interface SignInParams {
 	email: string;
 	password: string;

@@ -6,3 +6,4 @@ export * from './bar/ResponsiveBars';
 export * from './PageTitle';
 export * from './product/ProductInput';
 export * from './product/ProductFileInput';
+export * from './product/Product';

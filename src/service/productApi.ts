@@ -2,6 +2,7 @@ import { ProductParams } from '@/types';
 import { api } from './api';
 
 async function getProducts() {
+	console.log('getProducts');
 	return await api.get('/products');
 }
 
