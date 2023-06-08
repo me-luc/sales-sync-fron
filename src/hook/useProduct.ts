@@ -39,7 +39,11 @@ export function useProduct() {
 
 	const { data, isLoading: productsLoading } = useQuery(
 		'products',
-		productApi.getProducts
+		productApi.getProducts,
+		{
+			refetchOnMount: true,
+			refetchOnWindowFocus: true,
+		}
 	);
 
 	useEffect(() => {

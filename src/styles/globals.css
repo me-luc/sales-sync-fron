@@ -17,10 +17,10 @@
 	--icon-color: #a0a0a0;
 	--icon-color-hover: #333333;
 
-	--border-radius: 5px;
+	--border-radius: 0;
 	--placeholder-color: #a0a0a0;
 
-	--bar-height: 90px;
+	--bar-height: 70px;
 
 	--test-color: red;
 	--image-background-color: #d9d9d9;
@@ -84,7 +84,7 @@ body {
 
 body {
 	background-color: var(--primary-background-color);
-	padding: 30px;
+	padding: 0 30px;
 }
 
 a {
@@ -106,8 +106,8 @@ button {
 }
 
 .secure-layout-mobile {
-	padding-top: var(--bar-height);
-	padding-bottom: var(--bar-height);
+	padding-top: calc(var(--bar-height) + 15px);
+	padding-bottom: calc(var(--bar-height) + 15px);
 }
 
 .invisible {

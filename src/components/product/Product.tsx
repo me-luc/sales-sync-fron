@@ -85,7 +85,7 @@ const InfoBox = styled.div`
 	align-items: start;
 	justify-content: center;
 
-	padding: 15px 20px;
+	padding: 10px 13px;
 `;
 
 const PriceBox = styled.div`
