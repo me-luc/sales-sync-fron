@@ -5,6 +5,7 @@ import { createContext, useEffect, useState } from 'react';
 export const AuthenticationContext = createContext({
 	isAuthenticated: false,
 	setToken: (token: string) => {},
+	finishedLoading: false,
 });
 
 export function AuthenticationProvider({
@@ -14,17 +15,22 @@ export function AuthenticationProvider({
 }) {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [token, setToken] = useState('');
+	const [finishedLoading, setFinishedLoading] = useState(false);
 
 	useEffect(() => {
-		if(!isAuthenticated) {
-			const tokenLoaded = loadToken();
-			if(tokenLoaded) setToken(tokenLoaded);
+		const tokenLoaded = loadToken();
+		if (tokenLoaded) {
+			setToken(tokenLoaded);
+			setApiToken(tokenLoaded);
+			setIsAuthenticated(true);
 		}
+		setFinishedLoading(true);
+	}, []);
+
+	useEffect(() => {
 		if (token) {
 			setApiToken(token);
 			setIsAuthenticated(true);
-			saveToken(token);
-			console.log('token configured on context');
 		}
 	}, [token]);
 
@@ -33,6 +39,7 @@ export function AuthenticationProvider({
 			value={{
 				isAuthenticated,
 				setToken,
+				finishedLoading,
 			}}>
 			{children}
 		</AuthenticationContext.Provider>
@@ -41,8 +48,4 @@ export function AuthenticationProvider({
 
 function loadToken() {
 	return localStorage.getItem('token');
-}
-
-function saveToken(token: string) {
-	localStorage.setItem('token', token);
 }
