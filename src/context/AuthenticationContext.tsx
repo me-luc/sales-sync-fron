@@ -16,9 +16,14 @@ export function AuthenticationProvider({
 	const [token, setToken] = useState('');
 
 	useEffect(() => {
+		if(!isAuthenticated) {
+			const tokenLoaded = loadToken();
+			if(tokenLoaded) setToken(tokenLoaded);
+		}
 		if (token) {
 			setApiToken(token);
 			setIsAuthenticated(true);
+			saveToken(token);
 			console.log('token configured on context');
 		}
 	}, [token]);
@@ -32,4 +37,12 @@ export function AuthenticationProvider({
 			{children}
 		</AuthenticationContext.Provider>
 	);
+}
+
+function loadToken() {
+	return localStorage.getItem('token');
+}
+
+function saveToken(token: string) {
+	localStorage.setItem('token', token);
 }
