@@ -1,10 +1,12 @@
 import { productApi } from '@/service';
 import { ProductParams } from '@/types';
 import { useRouter } from 'next/navigation';
-import { useMutation } from 'react-query';
+import { useEffect, useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 
 export function useProduct() {
+	const [products, setProducts] = useState([]);
 	const router = useRouter();
 
 	const { mutate } = useMutation(
@@ -35,5 +37,16 @@ export function useProduct() {
 		}
 	);
 
-	return { postProduct: mutate };
+	const { data, isLoading: productsLoading } = useQuery(
+		'products',
+		productApi.getProducts
+	);
+
+	useEffect(() => {
+		if (data?.data) {
+			setProducts(data.data);
+		}
+	}, [data]);
+
+	return { postProduct: mutate, products, productsLoading };
 }

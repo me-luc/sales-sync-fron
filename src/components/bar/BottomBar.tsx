@@ -11,7 +11,7 @@ export default function BottomBar() {
 				<HomeIcon className='icon clickable' />
 			</button>
 
-			<button onClick={() => router.push('/home')}>
+			<button onClick={() => router.push('/products')}>
 				<SearchIcon className='icon clickable' />
 			</button>
 
