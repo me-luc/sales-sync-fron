@@ -1,11 +1,22 @@
 'use client';
 import { Product } from '@/components';
+import { SearchProduct } from '@/components/product/SearchProduct';
 import { useProduct } from '@/hook';
 import { Product as ProductType, ProductParams } from '@/types';
+import { use, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 export default function Page() {
 	const { products, productsLoading } = useProduct();
+	const [filter, setFilter] = useState('');
+	const [filteredProducts, setFilteredProducts] = useState([]);
+
+	useEffect(() => {
+		const filtered = products.filter((product: ProductType) =>
+			product.name.toLowerCase().includes(filter.toLowerCase())
+		);
+		setFilteredProducts(filtered);
+	}, [filter, products]);
 
 	if (productsLoading) {
 		return <div>Loading...</div>;
@@ -13,8 +24,9 @@ export default function Page() {
 
 	return (
 		<div>
+			<SearchProduct value={filter} setValue={setFilter} />
 			<StyledList>
-				{products.map((product: ProductType) => (
+				{filteredProducts.map((product: ProductType) => (
 					<Product
 						key={product.id}
 						category={product.category}

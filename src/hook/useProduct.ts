@@ -1,5 +1,5 @@
 import { productApi } from '@/service';
-import { ProductParams } from '@/types';
+import { CreateProductParams, ProductParams } from '@/types';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
@@ -11,27 +11,30 @@ export function useProduct() {
 
 	const { mutate } = useMutation(
 		({
-			name,
-			price,
-			quantity,
-			description,
-			photo,
-			supplier,
-		}: ProductParams) =>
-			productApi.createProduct({
-				name,
-				price,
-				quantity,
-				description,
-				photo,
-				supplier,
-			}),
+			product: { name, price, quantity, description, photo, supplier },
+			formData,
+		}: CreateProductParams) =>
+			productApi.createProduct(
+				{
+					name,
+					price,
+					quantity,
+					description,
+					photo,
+					supplier,
+				},
+				formData
+			),
 		{
 			onSuccess: (data) => {
 				toast.success('Produto adicionado com sucesso!');
 				router.push('/home');
 			},
-			onError: (error) => {
+			onError: (error: any) => {
+				if (error.response.status === 413)
+					toast.error(
+						'Produto criado, porem Houve um problema ao adicionar imagem!'
+					);
 				toast.error('Não foi possível concluir!');
 			},
 		}
