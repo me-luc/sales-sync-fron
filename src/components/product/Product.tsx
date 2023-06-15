@@ -19,7 +19,9 @@ export function Product({
 	quantity,
 	image,
 }: ProductProps) {
-	const imagePath = image || './no-product-image.png';
+	const imagePath = image
+		? `${process.env.NEXT_PUBLIC_AWS_BUCKET_URL}${image}`
+		: './no-product-image.png';
 
 	return (
 		<StyledProduct>

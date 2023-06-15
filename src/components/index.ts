@@ -1,5 +1,5 @@
 export * from './Button';
-export * from './Input';
+export * from './AppInput';
 export * from './Logo';
 export * from './RedirectOption';
 export * from './bar/ResponsiveBars';
