@@ -27,8 +27,13 @@ async function createProduct(
 	});
 }
 
+async function deleteProduct(id: number) {
+	return await api.delete(`/products/${id}`);
+}
+
 export const productApi = {
 	getProducts,
 	getProduct,
 	createProduct,
+	deleteProduct,
 };
