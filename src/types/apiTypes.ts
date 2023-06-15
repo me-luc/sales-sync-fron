@@ -7,6 +7,11 @@ export interface ProductParams {
 	description?: string;
 }
 
+export interface CreateProductParams {
+	product: ProductParams;
+	formData: FormData;
+}
+
 export interface Product {
 	id: string;
 	name: string;
