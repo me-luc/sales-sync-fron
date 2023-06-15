@@ -5,21 +5,50 @@ import React from 'react';
 interface ProductInputProps
 	extends React.InputHTMLAttributes<HTMLInputElement> {
 	title: string;
+	formData: FormData;
+	setPhoto: (photo: string) => void;
+	setFile: (file: File) => void;
 }
 
-export function ProductFileInput({ title, ...props }: ProductInputProps) {
+export function ProductFileInput({
+	title,
+	formData,
+	setPhoto,
+	setFile,
+	...props
+}: ProductInputProps) {
 	return (
 		<>
 			<StyledContainer>
 				<InputTitle>{title}</InputTitle>
 				<StyledLabel htmlFor='file-input'>
 					Enviar arquivo
-					<Input id='file-input' type='file' {...props} hidden />
+					<Input
+						id='file-input'
+						type='file'
+						{...props}
+						hidden
+						onChange={handleChange}
+					/>
 				</StyledLabel>
 			</StyledContainer>
 			<Line />
 		</>
 	);
+
+	function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+		const newFile = event.target.files?.[0];
+
+		if (newFile) {
+			setFile(newFile);
+			const tempUrl = URL.createObjectURL(newFile);
+			setPhoto(tempUrl);
+
+			formData.append('file', newFile);
+
+			console.log('FORM DATA AFTER FILE: ', formData.entries());
+		}
+	}
 }
 
 const StyledContainer = styled.div`

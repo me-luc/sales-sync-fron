@@ -27,8 +27,9 @@ export function ProductInput({
 const StyledContainer = styled.div`
 	width: 100%;
 	display: flex;
+	flex-direction: column;
 	justify-content: space-between;
-	align-items: center;
+	align-items: start;
 
 	&:first-child {
 		background-color: red;
@@ -42,6 +43,7 @@ const InputTitle = styled.h4`
 	line-height: 125%;
 	text-align: left;
 	letter-spacing: 0.75px;
+	margin-bottom: 10px;
 
 	color: var(--tertiery-text-color);
 `;
@@ -58,21 +60,22 @@ interface InputProps {
 }
 
 const Input = styled.input<InputProps>`
-	width: 185px;
+	width: 100%;
+	height: 40px;
 	background-color: var(--base-color);
 	font-weight: 700;
 	font-size: 16px;
 	line-height: 125%;
-	text-align: center;
+	text-align: left;
 	letter-spacing: 0.75px;
 	outline: none;
 	color: ${({ highlight }) => highlight && 'var(--accent-color)'};
 
-	padding: 5px 10px;
+	padding: 5px 15px;
 
 	&::placeholder {
 		font-size: 16px;
-		color: var(--tertiery-text-color);
+		color: var(--placeholder-color);
 	}
 
 	&[type='file'] {

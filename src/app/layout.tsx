@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang='pt-br'>
-			<Head>
+			<head>
 				<meta charSet='utf-8' />
 				<meta
 					name='viewport'
@@ -34,7 +34,7 @@ export default function RootLayout({
 				<link rel='apple-touch-icon' href='/logo192.png' />
 				<link rel='preconnect' href='https://fonts.gstatic.com' />
 				<link rel='shortcut icon' href='/favicon.ico' />
-			</Head>
+			</head>
 			<QueryClientWrapper>
 				<AuthenticationProvider>
 					<body className={montserrat.className}>{children}</body>

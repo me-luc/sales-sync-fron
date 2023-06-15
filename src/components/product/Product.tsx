@@ -1,10 +1,13 @@
 import { Lato } from 'next/font/google';
 import Image from 'next/image';
 import styled from 'styled-components';
+import { ProductOverview } from './ProductOverview';
+import { useState } from 'react';
 
 const lato = Lato({ weight: '700', subsets: ['latin'] });
 
 interface ProductProps {
+	id: number;
 	category?: string;
 	title: string;
 	price: number;
@@ -18,17 +21,39 @@ export function Product({
 	price,
 	quantity,
 	image,
+	id,
 }: ProductProps) {
-	const imagePath = image || './no-product-image.png';
+	const [showOverview, setShowOverview] = useState(false);
+
+	function imageLoader() {
+		return image
+			? `${process.env.NEXT_PUBLIC_AWS_BUCKET_URL}${image}`
+			: './no-product-image.png';
+	}
 
 	return (
-		<StyledProduct>
+		<StyledProduct
+			onClick={() => {
+				setShowOverview(true);
+			}}>
+			{showOverview && (
+				<ProductOverview
+					id={id}
+					setShowOverview={setShowOverview}
+					category={category}
+					title={title}
+					price={price}
+					quantity={quantity}
+					image={image}
+				/>
+			)}
 			<Image
-				loader={() => imagePath}
-				src={imagePath}
+				loader={imageLoader}
+				src='/no-product-image.png'
 				alt='product image'
 				width={100}
 				height={190}
+				className='product-image'
 			/>
 
 			<InfoBox>
@@ -51,12 +76,11 @@ const StyledProduct = styled.li`
 	height: 300px;
 	overflow: hidden;
 
-	img {
+	.product-image {
 		width: 100%;
 		height: 190px;
 		object-fit: cover;
 		margin: 0;
-		background: var(--image-background-color);
 	}
 `;
 

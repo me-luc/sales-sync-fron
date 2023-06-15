@@ -1,11 +1,12 @@
 import { IconProps } from '@/types';
 
-export function SearchIcon({ className }: IconProps) {
+export function SearchIcon({ className, size }: IconProps) {
+	const width = size ? size : '28';
 	return (
 		<svg
 			className={className}
-			width='28'
-			height='28'
+			width={width}
+			height={width}
 			viewBox='0 0 28 28'
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'>

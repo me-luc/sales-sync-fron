@@ -1,7 +1,7 @@
 'use client';
 import { PageTitle, ProductFileInput, ProductInput } from '@/components';
 import { useProduct } from '@/hook';
-
+import { ProductParams } from '@/types';
 import { Lato } from 'next/font/google';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -15,11 +15,14 @@ export default function AddProductPage() {
 	const [description, setDescription] = useState('');
 	const [supplier, setSupplier] = useState('');
 	const { postProduct } = useProduct();
+	const formData = new FormData();
+	const [photo, setPhoto] = useState('');
+	const [file, setFile] = useState<File | null>(null);
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 
-		const product = {
+		const product: ProductParams = {
 			name,
 			description,
 			price,
@@ -27,21 +30,32 @@ export default function AddProductPage() {
 			quantity,
 		};
 
-		postProduct(product);
+		if (file) formData.append('file', file);
+
+		postProduct({ product, formData });
 	}
 
 	return (
 		<main>
 			<PageTitle backPath='home' title='Add Product' />
 			<StyledImageBox>
-				<StyledImage
-					src='/no-product-image.png'
-					alt='Under Construction'
-				/>
+				{photo ? (
+					<StyledImage src={photo} uploadedPhoto />
+				) : (
+					<StyledImage
+						src='/no-product-image.png'
+						alt='Under Construction'
+					/>
+				)}
 			</StyledImageBox>
 
-			<form onSubmit={handleSubmit}>
-				<ProductFileInput title='Foto do produto' />
+			<form onSubmit={handleSubmit} encType='multipart/form-data'>
+				<ProductFileInput
+					title='Foto do produto'
+					formData={formData}
+					setPhoto={setPhoto}
+					setFile={setFile}
+				/>
 				<ProductInput
 					title='Nome do produto'
 					placeholder='NomeDoProduto'
@@ -98,9 +112,21 @@ const StyledImageBox = styled.div`
 	align-items: center;
 `;
 
-const StyledImage = styled.img`
+interface StyledImageProps {
+	uploadedPhoto?: boolean;
+}
+
+const StyledImage = styled.img<StyledImageProps>`
 	width: 135px;
 	height: auto;
+
+	${({ uploadedPhoto }) =>
+		uploadedPhoto &&
+		`
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	`}
 `;
 
 const QuantityInput = styled.input`
