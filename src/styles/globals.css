@@ -26,7 +26,7 @@
 	--image-background-color: #d9d9d9;
 }
 
-.icon.input-icon {
+.input-icon {
 	position: absolute;
 	top: 50%;
 	left: 40px;
@@ -35,6 +35,10 @@
 
 .icon path {
 	fill: var(--icon-color);
+}
+
+.stroke-icon path {
+	stroke: var(--icon-color);
 }
 
 .icon.clickable {
