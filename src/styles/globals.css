@@ -26,6 +26,10 @@
 	--image-background-color: #d9d9d9;
 }
 
+img {
+	background-color: var(--image-background-color);
+}
+
 .input-icon {
 	position: absolute;
 	top: 50%;

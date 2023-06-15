@@ -1,5 +1,5 @@
 'use client';
-import { Product } from '@/components';
+import { Product, ProductOverview } from '@/components';
 import { SearchProduct } from '@/components/product/SearchProduct';
 import { useProduct } from '@/hook';
 import { Product as ProductType, ProductParams } from '@/types';
@@ -28,6 +28,7 @@ export default function Page() {
 			<StyledList>
 				{filteredProducts.map((product: ProductType) => (
 					<Product
+						id={Number(product.id)}
 						key={product.id}
 						category={product.category}
 						title={product.name}
