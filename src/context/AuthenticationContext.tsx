@@ -30,6 +30,7 @@ export function AuthenticationProvider({
 	useEffect(() => {
 		if (token) {
 			setApiToken(token);
+			localStorage.setItem('token', token);
 			setIsAuthenticated(true);
 		}
 	}, [token]);
