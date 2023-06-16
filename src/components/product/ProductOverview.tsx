@@ -2,7 +2,8 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import { ActionButton } from './ActionButton';
 import { ButtonType } from '@/types';
-import { useProduct } from '@/hook';
+import { useProduct, useSales } from '@/hook';
+import { api } from '@/service/api';
 
 interface ProductOverviewProps {
 	setShowOverview: (show: boolean) => void;
@@ -24,6 +25,10 @@ export function ProductOverview({
 	id,
 }: ProductOverviewProps) {
 	const { deleteProduct } = useProduct();
+	const { sellManually, sellProduct } = useSales(() =>
+		setShowOverview(false)
+	);
+
 	function imageLoader() {
 		return image
 			? `${process.env.NEXT_PUBLIC_AWS_BUCKET_URL}${image}`
@@ -52,8 +57,12 @@ export function ProductOverview({
 
 				<ActionButton
 					name='Vender'
-					onClick={() => {}}
+					onClick={() => sellProduct(id)}
 					type={ButtonType.highlight}
+				/>
+				<ActionButton
+					name='Vender (manual)'
+					onClick={() => sellManually(id)}
 				/>
 				<ActionButton name='Editar' onClick={() => {}} />
 				<ActionButton name='Deletar' onClick={handleDelete} />
