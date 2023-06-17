@@ -33,3 +33,19 @@ export interface SignUpParams {
 	password: string;
 	name: string;
 }
+
+export interface ProductSaleResponse {
+	id: string;
+	name: string;
+	quantity: number;
+	price: number;
+	photo: string;
+}
+
+export interface SaleResponse {
+	id: number;
+	date: string;
+	saleProducts: ProductSaleResponse[];
+	paymentMethod: string;
+	totalPrice: number;
+}
