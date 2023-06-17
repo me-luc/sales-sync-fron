@@ -22,4 +22,8 @@ async function sellProduct(productId: number) {
 	});
 }
 
-export const salesApi = { sellManually, sellProduct };
+async function getSales() {
+	return await api.get('/sales');
+}
+
+export const salesApi = { sellManually, sellProduct, getSales };

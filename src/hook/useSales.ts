@@ -1,16 +1,20 @@
 import { salesApi } from '@/service/salesApi';
-import { useMutation, useQueryClient } from 'react-query';
+import { SaleResponse } from '@/types';
+import { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 
-export function useSales(fn: Function) {
+export function useSales(fn?: Function) {
 	const queryClient = useQueryClient();
+
+	const [sales, setSales] = useState<SaleResponse[]>([]);
 
 	const { mutate: sellManually } = useMutation(
 		(productId: number) => salesApi.sellManually(productId),
 		{
 			onSuccess: (data) => {
 				toast.success('Venda realizada com sucesso!');
-				fn();
+				fn && fn();
 			},
 			onError: (error: any) => {
 				toast.error('Não foi possível concluir!');
@@ -36,5 +40,13 @@ export function useSales(fn: Function) {
 		}
 	);
 
-	return { sellManually, sellProduct };
+	const { data: saleResponse } = useQuery('sales', salesApi.getSales);
+
+	useEffect(() => {
+		if (saleResponse) {
+			setSales(saleResponse.data);
+		}
+	}, [saleResponse]);
+
+	return { sellManually, sellProduct, sales };
 }
