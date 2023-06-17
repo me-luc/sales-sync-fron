@@ -19,7 +19,7 @@ export default function BottomBar() {
 				<AddIcon className='icon clickable' />
 			</button>
 
-			<button onClick={() => router.push('/home')}>
+			<button onClick={() => router.push('/sales')}>
 				<FavoriteIcon className='icon clickable' />
 			</button>
 

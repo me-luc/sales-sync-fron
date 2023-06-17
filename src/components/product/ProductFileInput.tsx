@@ -74,7 +74,7 @@ const InputTitle = styled.h4`
 const Line = styled.div`
 	height: 0.5px;
 	width: 100%;
-	background: #cbd7e1;
+	background: var(--line-division-color);
 	margin: 20px 0;
 `;
 
