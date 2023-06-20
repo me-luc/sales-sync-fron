@@ -19,8 +19,13 @@ async function signOut() {
 	return await api.post('/auth/sign-out');
 }
 
+async function checkToken() {
+	return await api.get('/auth/check-token');
+}
+
 export const authApi = {
 	signIn,
 	signUp,
 	signOut,
+	checkToken,
 };
