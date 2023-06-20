@@ -1,4 +1,5 @@
 'use client';
+import { useAuth } from '@/hook';
 import { setApiToken } from '@/service/api';
 import { createContext, useEffect, useState } from 'react';
 
@@ -17,12 +18,16 @@ export function AuthenticationProvider({
 	const [token, setToken] = useState('');
 	const [finishedLoading, setFinishedLoading] = useState(false);
 
+	const { checkToken, tokenError } = useAuth();
+
 	useEffect(() => {
 		const tokenLoaded = loadToken();
 		if (tokenLoaded) {
 			setToken(tokenLoaded);
 			setApiToken(tokenLoaded);
+			checkToken();
 			setIsAuthenticated(true);
+			console.log(isAuthenticated);
 		}
 		setFinishedLoading(true);
 	}, []);

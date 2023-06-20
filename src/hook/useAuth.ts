@@ -40,8 +40,19 @@ export function useAuth() {
 		}
 	);
 
+	let tokenError: AxiosError | undefined;
+	const { mutate: checkToken } = useMutation(() => authApi.checkToken(), {
+		onError: (error: AxiosError) => {
+			tokenError = error;
+			toast.error('Faça login novamente!');
+			return router.push('/sign-in');
+		},
+	});
+
 	return {
 		signIn,
 		signUp,
+		checkToken,
+		tokenError,
 	};
 }
