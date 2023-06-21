@@ -1,99 +1,88 @@
-import Image from 'next/image';
 import styled from 'styled-components';
 import { ActionButton } from './ActionButton';
-import { ButtonType } from '@/types';
-import { useProduct, useSales } from '@/hook';
-import { api } from '@/service/api';
+import { ButtonType, ProductSale } from '@/types';
+import { useAuth, useProduct, useSales } from '@/hook';
+import { useContext, useState } from 'react';
+import { AuthenticationContext } from '@/context';
+import { Toast } from '../Toast';
+import { ProductOverviewItem } from './ProductOverviewItem';
 
 interface ProductOverviewProps {
 	setShowOverview: (show: boolean) => void;
-	id: number;
-	category?: string;
-	title: string;
-	price: number;
-	quantity: number;
-	image?: string;
+	products: ProductSale[];
 }
 
 export function ProductOverview({
 	setShowOverview,
-	category,
-	title,
-	price,
-	quantity,
-	image,
-	id,
+	products,
 }: ProductOverviewProps) {
+	const [showInfoMissing, setShowInfoMissing] = useState(false);
+	const { user } = useContext(AuthenticationContext);
 	const { deleteProduct } = useProduct();
-	const { sellManually, sellProduct } = useSales(() =>
+	const { sellManually, getPaymentLink } = useSales(() =>
 		setShowOverview(false)
 	);
-
-	function imageLoader() {
-		return image
-			? `${process.env.NEXT_PUBLIC_AWS_BUCKET_URL}${image}`
-			: './no-product-image.png';
-	}
+	const { getAccountUpdateLink } = useAuth();
 
 	return (
-		<BlurrBackground onClick={handleClick}>
-			<ProductBox>
-				<Image
-					loader={imageLoader}
-					src='/no-product-image.png'
-					alt='product image'
-					width={145}
-					height={145}
-					className='product-image-overview'
-				/>
-				<InfoBox>
-					<Category>{category}</Category>
-					<Title>{title}</Title>
-					<CountBox>
-						<Quantity>QT: {quantity} </Quantity>
-						<Price>R$ {price}</Price>
-					</CountBox>
-				</InfoBox>
+		<Toast type='custom' setShow={setShowOverview}>
+			<Container>
+				{showInfoMissing && (
+					<Toast
+						type='warning'
+						setShow={setShowInfoMissing}
+						buttonType='both'
+						message='Configure alguns detalhes para conseguir enviar links de pagamento!'
+						continueAction={handleContinue}
+					/>
+				)}
+
+				{products.map((product) => (
+					<ProductOverviewItem
+						key={product.id}
+						id={product.id}
+						category={product.category}
+						title={product.name}
+						price={product.price}
+						quantity={product.quantity}
+						image={product.photo}
+					/>
+				))}
 
 				<ActionButton
-					name='Vender'
-					onClick={() => sellProduct(id)}
+					name='Link de pagamento'
+					onClick={handlePaymentLink}
 					type={ButtonType.highlight}
 				/>
 				<ActionButton
 					name='Vender (manual)'
-					onClick={() => sellManually(id)}
+					onClick={() => sellManually(products)}
 				/>
 				<ActionButton name='Editar' onClick={() => {}} />
 				<ActionButton name='Deletar' onClick={handleDelete} />
-			</ProductBox>
-		</BlurrBackground>
+			</Container>
+		</Toast>
 	);
-
-	function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-		event.stopPropagation();
-		if (event.target !== event.currentTarget) return;
-		setShowOverview(false);
-	}
 
 	function handleDelete() {
 		deleteProduct(id);
 		setShowOverview(false);
 	}
+
+	function handlePaymentLink() {
+		if (!user?.stripeCompletedProfile) {
+			return setShowInfoMissing(true);
+		}
+		getPaymentLink(id);
+	}
+
+	function handleContinue() {
+		getAccountUpdateLink();
+		setShowInfoMissing(false);
+	}
 }
 
-const BlurrBackground = styled.div`
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background: rgba(14, 14, 14, 0.7);
-	backdrop-filter: blur(5px);
-	z-index: 1;
-`;
-
-const ProductBox = styled.div`
+const Container = styled.div`
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -112,57 +101,4 @@ const ProductBox = styled.div`
 		margin: 0;
 		margin-right: 20px;
 	}
-`;
-
-const InfoBox = styled.div`
-	display: flex;
-	height: 145px;
-	flex-direction: column;
-	align-items: start;
-	justify-content: space-around;
-
-	text-align: left;
-	margin-bottom: 25px;
-`;
-
-const CountBox = styled.div`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-`;
-
-const Title = styled.h3`
-	font-weight: 600;
-	font-size: 20px;
-	line-height: 125%;
-	letter-spacing: 0.75px;
-	text-transform: uppercase;
-	color: var(--primary-text-color);
-`;
-
-const Category = styled.span`
-	font-weight: 400;
-	font-size: 13px;
-	line-height: 125%;
-	text-align: center;
-	letter-spacing: 0.75px;
-	color: var(--tertiery-text-color);
-	margin-bottom: 5px;
-`;
-
-const Price = styled.span`
-	font-weight: 700;
-	font-size: 18px;
-	text-align: center;
-	letter-spacing: 0.75px;
-	color: var(--primary-text-color);
-`;
-
-const Quantity = styled.span`
-	font-weight: 700;
-	font-size: 18px;
-	text-align: center;
-	letter-spacing: 0.75px;
-	color: var(--accent-color);
 `;

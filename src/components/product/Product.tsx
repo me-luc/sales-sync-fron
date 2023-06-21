@@ -2,7 +2,9 @@ import { Lato } from 'next/font/google';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { ProductOverview } from './ProductOverview';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { ProductsContext } from '@/context/ProductsContext';
+import { ProductSale } from '@/types';
 
 const lato = Lato({ weight: '700', subsets: ['latin'] });
 
@@ -13,6 +15,8 @@ interface ProductProps {
 	price: number;
 	quantity: number;
 	image?: string;
+	editingMultiple: boolean;
+	setShowOverview: (value: boolean) => void;
 }
 
 export function Product({
@@ -22,8 +26,11 @@ export function Product({
 	quantity,
 	image,
 	id,
+	editingMultiple,
+	setShowOverview,
 }: ProductProps) {
-	const [showOverview, setShowOverview] = useState(false);
+	const { products, setProducts } = useContext(ProductsContext);
+	const [selected, setSelected] = useState(false);
 
 	function imageLoader() {
 		return image
@@ -33,20 +40,8 @@ export function Product({
 
 	return (
 		<StyledProduct
-			onClick={() => {
-				setShowOverview(true);
-			}}>
-			{showOverview && (
-				<ProductOverview
-					id={id}
-					setShowOverview={setShowOverview}
-					category={category}
-					title={title}
-					price={price}
-					quantity={quantity}
-					image={image}
-				/>
-			)}
+			onClick={handleClick}
+			selected={selected && editingMultiple}>
 			<Image
 				loader={imageLoader}
 				src='/no-product-image.png'
@@ -68,13 +63,49 @@ export function Product({
 			</InfoBox>
 		</StyledProduct>
 	);
+
+	function handleClick(event: React.MouseEvent<HTMLLIElement, MouseEvent>) {
+		event.stopPropagation();
+		if (!editingMultiple) return setShowOverview(true);
+
+		const newProduct = {
+			category,
+			name: title,
+			price,
+			quantity,
+			photo: image,
+			id,
+		} as ProductSale;
+
+		const productsArr = products;
+		if (products.find((product) => product.id === id)) {
+			const index = productsArr.findIndex((product) => product.id === id);
+			productsArr.splice(index, 1);
+			setSelected(false);
+			setProducts(productsArr);
+			return;
+		}
+
+		setSelected(true);
+		productsArr.push(newProduct);
+		setProducts(productsArr);
+	}
 }
 
-const StyledProduct = styled.li`
+interface StyledProductProps {
+	selected?: boolean;
+}
+
+const StyledProduct = styled.li<StyledProductProps>`
 	width: 150px;
 	max-width: 240px;
 	height: 300px;
 	overflow: hidden;
+	cursor: pointer;
+
+	transition: all 0.2s ease-in-out;
+
+	${({ selected }) => selected && 'border: 3px solid var(--accent-color);'}
 
 	.product-image {
 		width: 100%;
