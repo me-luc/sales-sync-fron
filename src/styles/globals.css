@@ -28,6 +28,11 @@
 	--body-padding-vertical: 30px;
 
 	--line-division-color: #cbd7e1;
+
+	--warning-color: #eb7100;
+	--warning-color-hover: #ff912a;
+	--error-color: #ff0000;
+	--error-color-hover: #ff3333;
 }
 
 img {
