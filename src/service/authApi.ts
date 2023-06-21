@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { api } from './api';
 
 async function signIn(email: string, password: string) {
@@ -23,9 +24,15 @@ async function checkToken() {
 	return await api.get('/auth/check-token');
 }
 
+async function getAccountUpdateLink() {
+	toast.loading('Obtendo link de atualização de conta...');
+	return await api.get('/sales/user-stripe-account');
+}
+
 export const authApi = {
 	signIn,
 	signUp,
 	signOut,
 	checkToken,
+	getAccountUpdateLink,
 };
