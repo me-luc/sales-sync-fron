@@ -1,5 +1,6 @@
+import { ProductsContext } from '@/context/ProductsContext';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 interface ProductOverviewItemProps {
@@ -18,6 +19,8 @@ export function ProductOverviewItem({
 	id,
 }: ProductOverviewItemProps) {
 	const [quantity, setQuantity] = useState(1);
+	const { products, setProducts } = useContext(ProductsContext);
+
 	function imageLoader() {
 		return image
 			? `${process.env.NEXT_PUBLIC_AWS_BUCKET_URL}${image}`
@@ -25,7 +28,7 @@ export function ProductOverviewItem({
 	}
 
 	return (
-		<ProductBox>
+		<ProductBox className='PRODUCT BOX'>
 			<LeftBox>
 				<Image
 					loader={imageLoader}
@@ -54,13 +57,31 @@ export function ProductOverviewItem({
 
 	function addQuantity() {
 		setQuantity(quantity + 1);
+		updateProductCount('add');
 	}
 
 	function removeQuantity() {
 		if (quantity === 1) return;
 		setQuantity(quantity - 1);
+		updateProductCount('remove');
+	}
+
+	function updateProductCount(type: 'add' | 'remove') {
+		const productsArr = products;
+		const index = productsArr.findIndex((product) => product.id === id);
+		if (type === 'add') productsArr[index].desiredQuantity++;
+		if (type === 'remove') productsArr[index].desiredQuantity--;
+		setProducts(productsArr);
 	}
 }
+
+const ProductBox = styled.div`
+	display: flex;
+	width: 100%;
+	height: 145px;
+	margin-bottom: 25px;
+	justify-content: space-between;
+`;
 
 const InfoBox = styled.div`
 	display: flex;
@@ -109,14 +130,6 @@ const Price = styled.span`
 	color: var(--primary-text-color);
 `;
 
-const ProductBox = styled.div`
-	display: flex;
-	width: 100%;
-	height: 145px;
-	margin-bottom: 25px;
-	justify-content: space-between;
-`;
-
 const LeftBox = styled.div`
 	display: flex;
 	width: 100%;
@@ -132,11 +145,11 @@ const Quantity = styled.span`
 `;
 
 const QuantityBox = styled.div`
+	height: auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
-
 	margin-left: 40px;
 `;
 
@@ -144,7 +157,7 @@ const QuantityButton = styled.button`
 	width: 45px;
 	height: 45px;
 	background: none;
-	border: 1px solid #cbd7e1;
+	border: 1px solid var(--line-division-color);
 	border-radius: 30%;
 
 	font-family: 'Montserrat';

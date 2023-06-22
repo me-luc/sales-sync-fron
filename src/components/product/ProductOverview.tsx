@@ -2,20 +2,18 @@ import styled from 'styled-components';
 import { ActionButton } from './ActionButton';
 import { ButtonType, ProductSale } from '@/types';
 import { useAuth, useProduct, useSales } from '@/hook';
-import { useContext, useState } from 'react';
+import { use, useContext, useState } from 'react';
 import { AuthenticationContext } from '@/context';
 import { Toast } from '../Toast';
 import { ProductOverviewItem } from './ProductOverviewItem';
+import { toast } from 'react-toastify';
+import { ProductsContext } from '@/context/ProductsContext';
 
 interface ProductOverviewProps {
 	setShowOverview: (show: boolean) => void;
-	products: ProductSale[];
 }
 
-export function ProductOverview({
-	setShowOverview,
-	products,
-}: ProductOverviewProps) {
+export function ProductOverview({ setShowOverview }: ProductOverviewProps) {
 	const [showInfoMissing, setShowInfoMissing] = useState(false);
 	const { user } = useContext(AuthenticationContext);
 	const { deleteProduct } = useProduct();
@@ -23,10 +21,13 @@ export function ProductOverview({
 		setShowOverview(false)
 	);
 	const { getAccountUpdateLink } = useAuth();
+	const { products } = useContext(ProductsContext);
+
+	if (!products.length) return toast.error('Nenhum produto selecionado!');
 
 	return (
 		<Toast type='custom' setShow={setShowOverview}>
-			<Container>
+			<Container className='PRODUCT BOX CONTAINET PRODUCT OVERVIEW'>
 				{showInfoMissing && (
 					<Toast
 						type='warning'
@@ -37,35 +38,45 @@ export function ProductOverview({
 					/>
 				)}
 
-				{products.map((product) => (
-					<ProductOverviewItem
-						key={product.id}
-						id={product.id}
-						category={product.category}
-						title={product.name}
-						price={product.price}
-						quantity={product.quantity}
-						image={product.photo}
-					/>
-				))}
+				<ProductsContainer>
+					{products.map((product) => (
+						<ProductOverviewItem
+							key={product.id}
+							id={product.id}
+							category={product.category}
+							title={product.name}
+							price={product.price}
+							image={product.photo}
+						/>
+					))}
+				</ProductsContainer>
 
-				<ActionButton
-					name='Link de pagamento'
-					onClick={handlePaymentLink}
-					type={ButtonType.highlight}
-				/>
-				<ActionButton
-					name='Vender (manual)'
-					onClick={() => sellManually(products)}
-				/>
-				<ActionButton name='Editar' onClick={() => {}} />
-				<ActionButton name='Deletar' onClick={handleDelete} />
+				<ActionsContainer>
+					<ActionButton
+						name='Link de pagamento'
+						onClick={handlePaymentLink}
+						type={ButtonType.highlight}
+					/>
+					<ActionButton
+						name='Vender (manual)'
+						onClick={() => sellManually(products)}
+					/>
+					{products.length === 1 && (
+						<>
+							<ActionButton name='Editar' onClick={() => {}} />
+							<ActionButton
+								name='Deletar'
+								onClick={handleDelete}
+							/>
+						</>
+					)}
+				</ActionsContainer>
 			</Container>
 		</Toast>
 	);
 
 	function handleDelete() {
-		deleteProduct(id);
+		deleteProduct(products[0].id);
 		setShowOverview(false);
 	}
 
@@ -73,7 +84,7 @@ export function ProductOverview({
 		if (!user?.stripeCompletedProfile) {
 			return setShowInfoMissing(true);
 		}
-		getPaymentLink(id);
+		getPaymentLink(products);
 	}
 
 	function handleContinue() {
@@ -86,12 +97,15 @@ const Container = styled.div`
 	position: fixed;
 	top: 0;
 	left: 0;
-	width: 100vw;
+	width: 100%;
 	height: auto;
+	max-height: 700px;
 	background-color: var(--base-color);
 
 	display: flex;
-	flex-wrap: wrap;
+	flex-flow: column;
+	align-items: stretch;
+
 	padding: 25px;
 
 	.product-image-overview {
@@ -101,4 +115,19 @@ const Container = styled.div`
 		margin: 0;
 		margin-right: 20px;
 	}
+`;
+
+const ActionsContainer = styled.div`
+	width: 100%;
+`;
+
+const ProductsContainer = styled.div`
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	overflow-y: scroll;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	flex: 1 1 auto;
 `;

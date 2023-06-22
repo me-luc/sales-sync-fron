@@ -45,8 +45,6 @@ export function ProductFileInput({
 			setPhoto(tempUrl);
 
 			formData.append('file', newFile);
-
-			console.log('FORM DATA AFTER FILE: ', formData.entries());
 		}
 	}
 }

@@ -1,7 +1,7 @@
-export function SelectMultipleIcon() {
+export function SelectMultipleIcon({ selected = false }) {
 	return (
 		<svg
-			className='icon clickable'
+			className={'icon clickable' + (selected && ' selected')}
 			width='40'
 			height='40'
 			viewBox='0 0 39 39'

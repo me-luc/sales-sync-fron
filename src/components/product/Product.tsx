@@ -2,7 +2,7 @@ import { Lato } from 'next/font/google';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { ProductOverview } from './ProductOverview';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ProductsContext } from '@/context/ProductsContext';
 import { ProductSale } from '@/types';
 
@@ -31,6 +31,10 @@ export function Product({
 }: ProductProps) {
 	const { products, setProducts } = useContext(ProductsContext);
 	const [selected, setSelected] = useState(false);
+
+	useEffect(() => {
+		setSelected(false);
+	}, [editingMultiple]);
 
 	function imageLoader() {
 		return image
@@ -66,8 +70,8 @@ export function Product({
 
 	function handleClick(event: React.MouseEvent<HTMLLIElement, MouseEvent>) {
 		event.stopPropagation();
-		if (!editingMultiple) return setShowOverview(true);
 
+		const productsArr = products;
 		const newProduct = {
 			category,
 			name: title,
@@ -75,9 +79,18 @@ export function Product({
 			quantity,
 			photo: image,
 			id,
+			desiredQuantity: 1,
 		} as ProductSale;
 
-		const productsArr = products;
+		if (!editingMultiple) {
+			productsArr.splice(0, productsArr.length);
+			productsArr.push(newProduct);
+			setSelected(true);
+			setProducts(productsArr);
+			setShowOverview(true);
+			return;
+		}
+
 		if (products.find((product) => product.id === id)) {
 			const index = productsArr.findIndex((product) => product.id === id);
 			productsArr.splice(index, 1);
@@ -86,9 +99,11 @@ export function Product({
 			return;
 		}
 
+		console.log('selected');
 		setSelected(true);
 		productsArr.push(newProduct);
 		setProducts(productsArr);
+		console.log(products);
 	}
 }
 

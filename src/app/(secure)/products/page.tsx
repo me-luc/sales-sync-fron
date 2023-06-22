@@ -14,15 +14,13 @@ export default function Page() {
 	const { products, productsLoading } = useProduct();
 	const [filter, setFilter] = useState('');
 	const [filteredProducts, setFilteredProducts] = useState([]);
-	const { products: productsSelection, setProducts } =
-		useContext(ProductsContext);
 
 	useEffect(() => {
 		const filtered = products.filter((product: ProductType) =>
 			product.name.toLowerCase().includes(filter.toLowerCase())
 		);
 		setFilteredProducts(filtered);
-	}, [filter, products, productsSelection]);
+	}, [filter, products]);
 
 	if (productsLoading) {
 		return <div>Loading...</div>;
@@ -37,15 +35,12 @@ export default function Page() {
 			<TopBar>
 				<SearchProduct value={filter} setValue={setFilter} />
 				<IconButton onClick={editMultiple}>
-					<SelectMultipleIcon />
+					<SelectMultipleIcon selected={editingMultiple} />
 				</IconButton>
 			</TopBar>
 
 			{showOverview && (
-				<ProductOverview
-					setShowOverview={setShowOverview}
-					products={products}
-				/>
+				<ProductOverview setShowOverview={setShowOverview} />
 			)}
 			<StyledList>
 				{filteredProducts.map((product: ProductType) => (

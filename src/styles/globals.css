@@ -58,6 +58,10 @@ img {
 	cursor: pointer;
 }
 
+.icon.selected path {
+	fill: var(--accent-color);
+}
+
 .clickable.icon:hover path {
 	fill: var(--icon-color-hover);
 }
