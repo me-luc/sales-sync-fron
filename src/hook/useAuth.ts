@@ -3,7 +3,7 @@ import { authApi } from '@/service';
 import { SignInParams, SignUpParams } from '@/types';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 
@@ -49,10 +49,23 @@ export function useAuth() {
 		},
 	});
 
+	const { mutate: getAccountUpdateLink } = useMutation(
+		async () => await authApi.getAccountUpdateLink(),
+		{
+			onSuccess: (data) => {
+				window.location = data.data.url;
+			},
+			onError: (error: AxiosError) => {
+				toast.error('Erro ao obter link de atualização de conta!');
+			},
+		}
+	);
+
 	return {
 		signIn,
 		signUp,
 		checkToken,
 		tokenError,
+		getAccountUpdateLink,
 	};
 }

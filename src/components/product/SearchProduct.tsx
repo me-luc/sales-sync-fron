@@ -26,8 +26,7 @@ const StyledContainer = styled.div`
 	align-items: center;
 	justify-content: left;
 	position: relative;
-
-	margin-bottom: 25px;
+	margin-right: 15px;
 `;
 
 const StyledInput = styled.input`

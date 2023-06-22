@@ -1,108 +1,111 @@
-import Image from 'next/image';
 import styled from 'styled-components';
 import { ActionButton } from './ActionButton';
-import { ButtonType } from '@/types';
-import { useProduct, useSales } from '@/hook';
-import { api } from '@/service/api';
+import { ButtonType, ProductSale } from '@/types';
+import { useAuth, useProduct, useSales } from '@/hook';
+import { use, useContext, useState } from 'react';
+import { AuthenticationContext } from '@/context';
+import { Toast } from '../Toast';
+import { ProductOverviewItem } from './ProductOverviewItem';
+import { toast } from 'react-toastify';
+import { ProductsContext } from '@/context/ProductsContext';
 
 interface ProductOverviewProps {
 	setShowOverview: (show: boolean) => void;
-	id: number;
-	category?: string;
-	title: string;
-	price: number;
-	quantity: number;
-	image?: string;
 }
 
-export function ProductOverview({
-	setShowOverview,
-	category,
-	title,
-	price,
-	quantity,
-	image,
-	id,
-}: ProductOverviewProps) {
+export function ProductOverview({ setShowOverview }: ProductOverviewProps) {
+	const [showInfoMissing, setShowInfoMissing] = useState(false);
+	const { user } = useContext(AuthenticationContext);
 	const { deleteProduct } = useProduct();
-	const { sellManually, sellProduct } = useSales(() =>
+	const { sellManually, getPaymentLink } = useSales(() =>
 		setShowOverview(false)
 	);
+	const { getAccountUpdateLink } = useAuth();
+	const { products } = useContext(ProductsContext);
 
-	function imageLoader() {
-		return image
-			? `${process.env.NEXT_PUBLIC_AWS_BUCKET_URL}${image}`
-			: './no-product-image.png';
-	}
+	if (!products.length) return toast.error('Nenhum produto selecionado!');
 
 	return (
-		<BlurrBackground onClick={handleClick}>
-			<ProductBox>
-				<Image
-					loader={imageLoader}
-					src='/no-product-image.png'
-					alt='product image'
-					width={145}
-					height={145}
-					className='product-image-overview'
-				/>
-				<InfoBox>
-					<Category>{category}</Category>
-					<Title>{title}</Title>
-					<CountBox>
-						<Quantity>QT: {quantity} </Quantity>
-						<Price>R$ {price}</Price>
-					</CountBox>
-				</InfoBox>
+		<Toast type='custom' setShow={setShowOverview}>
+			<Container className='PRODUCT BOX CONTAINET PRODUCT OVERVIEW'>
+				{showInfoMissing && (
+					<Toast
+						type='warning'
+						setShow={setShowInfoMissing}
+						buttonType='both'
+						message='Configure alguns detalhes para conseguir enviar links de pagamento!'
+						continueAction={handleContinue}
+					/>
+				)}
 
-				<ActionButton
-					name='Vender'
-					onClick={() => sellProduct(id)}
-					type={ButtonType.highlight}
-				/>
-				<ActionButton
-					name='Vender (manual)'
-					onClick={() => sellManually(id)}
-				/>
-				<ActionButton name='Editar' onClick={() => {}} />
-				<ActionButton name='Deletar' onClick={handleDelete} />
-			</ProductBox>
-		</BlurrBackground>
+				<ProductsContainer>
+					{products.map((product) => (
+						<ProductOverviewItem
+							key={product.id}
+							id={product.id}
+							category={product.category}
+							title={product.name}
+							price={product.price}
+							image={product.photo}
+						/>
+					))}
+				</ProductsContainer>
+
+				<ActionsContainer>
+					<ActionButton
+						name='Link de pagamento'
+						onClick={handlePaymentLink}
+						type={ButtonType.highlight}
+					/>
+					<ActionButton
+						name='Vender (manual)'
+						onClick={() => sellManually(products)}
+					/>
+					{products.length === 1 && (
+						<>
+							<ActionButton name='Editar' onClick={() => {}} />
+							<ActionButton
+								name='Deletar'
+								onClick={handleDelete}
+							/>
+						</>
+					)}
+				</ActionsContainer>
+			</Container>
+		</Toast>
 	);
 
-	function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-		event.stopPropagation();
-		if (event.target !== event.currentTarget) return;
+	function handleDelete() {
+		deleteProduct(products[0].id);
 		setShowOverview(false);
 	}
 
-	function handleDelete() {
-		deleteProduct(id);
-		setShowOverview(false);
+	function handlePaymentLink() {
+		if (!user?.stripeCompletedProfile) {
+			return setShowInfoMissing(true);
+		}
+		getPaymentLink(products);
+	}
+
+	function handleContinue() {
+		getAccountUpdateLink();
+		setShowInfoMissing(false);
 	}
 }
 
-const BlurrBackground = styled.div`
+const Container = styled.div`
 	position: fixed;
 	top: 0;
 	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background: rgba(14, 14, 14, 0.7);
-	backdrop-filter: blur(5px);
-	z-index: 1;
-`;
-
-const ProductBox = styled.div`
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
+	width: 100%;
 	height: auto;
+	max-height: 700px;
 	background-color: var(--base-color);
 
 	display: flex;
-	flex-wrap: wrap;
+	flex-flow: column;
+	align-items: stretch;
+
 	padding: 25px;
 
 	.product-image-overview {
@@ -114,55 +117,17 @@ const ProductBox = styled.div`
 	}
 `;
 
-const InfoBox = styled.div`
-	display: flex;
-	height: 145px;
-	flex-direction: column;
-	align-items: start;
-	justify-content: space-around;
-
-	text-align: left;
-	margin-bottom: 25px;
-`;
-
-const CountBox = styled.div`
+const ActionsContainer = styled.div`
 	width: 100%;
+`;
+
+const ProductsContainer = styled.div`
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	overflow-y: scroll;
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
-`;
-
-const Title = styled.h3`
-	font-weight: 600;
-	font-size: 20px;
-	line-height: 125%;
-	letter-spacing: 0.75px;
-	text-transform: uppercase;
-	color: var(--primary-text-color);
-`;
-
-const Category = styled.span`
-	font-weight: 400;
-	font-size: 13px;
-	line-height: 125%;
-	text-align: center;
-	letter-spacing: 0.75px;
-	color: var(--tertiery-text-color);
-	margin-bottom: 5px;
-`;
-
-const Price = styled.span`
-	font-weight: 700;
-	font-size: 18px;
-	text-align: center;
-	letter-spacing: 0.75px;
-	color: var(--primary-text-color);
-`;
-
-const Quantity = styled.span`
-	font-weight: 700;
-	font-size: 18px;
-	text-align: center;
-	letter-spacing: 0.75px;
-	color: var(--accent-color);
+	flex-wrap: wrap;
+	justify-content: center;
+	flex: 1 1 auto;
 `;

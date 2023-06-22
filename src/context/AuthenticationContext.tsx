@@ -1,12 +1,14 @@
 'use client';
 import { useAuth } from '@/hook';
 import { setApiToken } from '@/service/api';
+import { User } from '@/types';
 import { createContext, useEffect, useState } from 'react';
 
 export const AuthenticationContext = createContext({
 	isAuthenticated: false,
 	setToken: (token: string) => {},
 	finishedLoading: false,
+	user: null as User | null,
 });
 
 export function AuthenticationProvider({
@@ -17,8 +19,9 @@ export function AuthenticationProvider({
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [token, setToken] = useState('');
 	const [finishedLoading, setFinishedLoading] = useState(false);
+	const [user, setUser] = useState<User | null>(null);
 
-	const { checkToken, tokenError } = useAuth();
+	const { checkToken } = useAuth();
 
 	useEffect(() => {
 		const tokenLoaded = loadToken();
@@ -27,10 +30,9 @@ export function AuthenticationProvider({
 			setApiToken(tokenLoaded);
 			checkToken();
 			setIsAuthenticated(true);
-			console.log(isAuthenticated);
 		}
 		setFinishedLoading(true);
-	}, []);
+	}, [checkToken]);
 
 	useEffect(() => {
 		if (token) {
@@ -46,6 +48,7 @@ export function AuthenticationProvider({
 				isAuthenticated,
 				setToken,
 				finishedLoading,
+				user,
 			}}>
 			{children}
 		</AuthenticationContext.Provider>

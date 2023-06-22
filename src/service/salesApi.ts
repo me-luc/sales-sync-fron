@@ -1,24 +1,25 @@
+import { ProductSale } from '@/types';
 import { api } from './api';
 
-async function sellManually(productId: number) {
+async function sellManually(products: ProductSale[]) {
+	const productsFormatted = products.map((product) => ({
+		id: product.id,
+		quantity: product.desiredQuantity,
+	}));
+
 	return await api.post('/sales/manual', {
-		products: [
-			{
-				id: productId,
-				quantity: 1,
-			},
-		],
+		products: productsFormatted,
 	});
 }
 
-async function sellProduct(productId: number) {
+async function sellProduct(products: ProductSale[]) {
+	const productsFormatted = products.map((product) => ({
+		id: product.id,
+		quantity: product.desiredQuantity,
+	}));
+
 	return await api.post('/sales', {
-		products: [
-			{
-				id: productId,
-				quantity: 1,
-			},
-		],
+		products: productsFormatted,
 	});
 }
 

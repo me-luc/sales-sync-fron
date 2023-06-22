@@ -6,3 +6,6 @@ export * from './UserIcon';
 export * from './PasswordIcon';
 export * from './ArrowBackIcon';
 export * from './ArrowFillIcon';
+export * from './ToastSuccessIcon';
+export * from './ToastWarningIcon';
+export * from './SelectMultipleIcon';

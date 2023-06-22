@@ -13,7 +13,7 @@ export interface CreateProductParams {
 }
 
 export interface Product {
-	id: string;
+	id: number;
 	name: string;
 	price: number;
 	quantity: number;
@@ -21,6 +21,17 @@ export interface Product {
 	supplier?: string;
 	description?: string;
 	category?: string;
+}
+
+export interface ProductSale {
+	id: number;
+	name: string;
+	category?: string;
+	price: number;
+	quantity: number;
+	photo: string;
+	selected: boolean;
+	desiredQuantity: number;
 }
 
 export interface SignInParams {
@@ -48,4 +59,11 @@ export interface SaleResponse {
 	saleProducts: ProductSaleResponse[];
 	paymentMethod: string;
 	totalPrice: number;
+}
+
+export interface User {
+	id: string;
+	name: string;
+	email: string;
+	stripeCompletedProfile: boolean;
 }

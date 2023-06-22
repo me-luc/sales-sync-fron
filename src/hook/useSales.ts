@@ -1,5 +1,5 @@
 import { salesApi } from '@/service/salesApi';
-import { SaleResponse } from '@/types';
+import { ProductSale, SaleResponse } from '@/types';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -10,14 +10,14 @@ export function useSales(fn?: Function) {
 	const [sales, setSales] = useState<SaleResponse[]>([]);
 
 	const { mutate: sellManually } = useMutation(
-		(productId: number) => salesApi.sellManually(productId),
+		(products: ProductSale[]) => salesApi.sellManually(products),
 		{
 			onSuccess: (data) => {
 				toast.success('Venda realizada com sucesso!');
 				fn && fn();
 			},
 			onError: (error: any) => {
-				toast.error('Não foi possível concluir!');
+				toast.error('Não foi possível concluir! Cheque o estoque.');
 			},
 			onSettled: () => {
 				queryClient.invalidateQueries('products');
@@ -25,8 +25,8 @@ export function useSales(fn?: Function) {
 		}
 	);
 
-	const { mutate: sellProduct } = useMutation(
-		(productId: number) => salesApi.sellProduct(productId),
+	const { mutate: getPaymentLink } = useMutation(
+		(products: ProductSale[]) => salesApi.sellProduct(products),
 		{
 			onSuccess: (data) => {
 				window.location = data.data.url;
@@ -48,5 +48,5 @@ export function useSales(fn?: Function) {
 		}
 	}, [saleResponse]);
 
-	return { sellManually, sellProduct, sales };
+	return { sellManually, getPaymentLink, sales };
 }
