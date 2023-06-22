@@ -17,7 +17,7 @@ export function useSales(fn?: Function) {
 				fn && fn();
 			},
 			onError: (error: any) => {
-				toast.error('Não foi possível concluir!');
+				toast.error('Não foi possível concluir! Cheque o estoque.');
 			},
 			onSettled: () => {
 				queryClient.invalidateQueries('products');

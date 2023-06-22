@@ -31,6 +31,7 @@ export interface ProductSale {
 	quantity: number;
 	photo: string;
 	selected: boolean;
+	desiredQuantity: number;
 }
 
 export interface SignInParams {

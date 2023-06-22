@@ -4,7 +4,7 @@ import { api } from './api';
 async function sellManually(products: ProductSale[]) {
 	const productsFormatted = products.map((product) => ({
 		id: product.id,
-		quantity: product.quantity,
+		quantity: product.desiredQuantity,
 	}));
 
 	return await api.post('/sales/manual', {
@@ -15,7 +15,7 @@ async function sellManually(products: ProductSale[]) {
 async function sellProduct(products: ProductSale[]) {
 	const productsFormatted = products.map((product) => ({
 		id: product.id,
-		quantity: product.quantity,
+		quantity: product.desiredQuantity,
 	}));
 
 	return await api.post('/sales', {
