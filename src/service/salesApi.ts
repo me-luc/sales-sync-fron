@@ -18,7 +18,7 @@ async function sellProduct(products: ProductSale[]) {
 		quantity: product.desiredQuantity,
 	}));
 
-	return await api.post('/sales', {
+	return await api.post('/sales/payment-link', {
 		products: productsFormatted,
 	});
 }
