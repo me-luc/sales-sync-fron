@@ -35,7 +35,7 @@ const StyledButton = styled.button<StyledButtonProps>`
 	font-weight: 400;
 	font-size: 14px;
 	cursor: pointer;
-	flex: 0 0 100%;
+	/* flex: 0 0 100%; */
 	text-transform: uppercase;
 	margin-bottom: 10px;
 

@@ -6,6 +6,8 @@ import styled from 'styled-components';
 export default function Home() {
 	const { sales } = useSales();
 
+	console.log(sales);
+
 	return (
 		<>
 			{sales.map((sale, index) => {
