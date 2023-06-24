@@ -1,7 +1,6 @@
 import { Lato } from 'next/font/google';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { ProductOverview } from './ProductOverview';
 import { useContext, useEffect, useState } from 'react';
 import { ProductsContext } from '@/context/ProductsContext';
 import { ProductSale } from '@/types';

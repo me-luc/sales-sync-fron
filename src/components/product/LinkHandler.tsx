@@ -6,7 +6,6 @@ import {
 	LinkedinShareButton,
 	RedditShareButton,
 	TelegramShareButton,
-	TumblrShareButton,
 	TwitterShareButton,
 	WhatsappShareButton,
 	EmailIcon,
@@ -15,7 +14,6 @@ import {
 	LinkedinIcon,
 	RedditIcon,
 	TelegramIcon,
-	TumblrIcon,
 	TwitterIcon,
 	WhatsappIcon,
 } from 'react-share';
