@@ -24,9 +24,12 @@ async function checkToken() {
 	return await api.get('/auth/check-token');
 }
 
+async function getUserInfo() {
+	return await api.get('/auth/user-info');
+}
+
 async function getAccountUpdateLink() {
-	toast.loading('Obtendo link de atualização de conta...');
-	return await api.get('/sales/user-stripe-account');
+	return await api.get('/auth/update-stripe-account-link');
 }
 
 export const authApi = {
@@ -35,4 +38,5 @@ export const authApi = {
 	signOut,
 	checkToken,
 	getAccountUpdateLink,
+	getUserInfo,
 };

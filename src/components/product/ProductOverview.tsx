@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 import { ActionButton } from './ActionButton';
-import { ButtonType, ProductSale } from '@/types';
+import { ButtonType } from '@/types';
 import { useAuth, useProduct, useSales } from '@/hook';
-import { use, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { AuthenticationContext } from '@/context';
 import { Toast } from '../Toast';
 import { ProductOverviewItem } from './ProductOverviewItem';
 import { toast } from 'react-toastify';
 import { ProductsContext } from '@/context/ProductsContext';
+import { LinkHandler } from './LinkHandler';
 
 interface ProductOverviewProps {
 	setShowOverview: (show: boolean) => void;
@@ -15,9 +16,10 @@ interface ProductOverviewProps {
 
 export function ProductOverview({ setShowOverview }: ProductOverviewProps) {
 	const [showInfoMissing, setShowInfoMissing] = useState(false);
+	const [showPaymentLink, setShowPaymentLink] = useState(false);
 	const { user } = useContext(AuthenticationContext);
 	const { deleteProduct } = useProduct();
-	const { sellManually, getPaymentLink } = useSales(() =>
+	const { sellManually, getPaymentLink, paymentLink } = useSales(() =>
 		setShowOverview(false)
 	);
 	const { getAccountUpdateLink } = useAuth();
@@ -27,7 +29,7 @@ export function ProductOverview({ setShowOverview }: ProductOverviewProps) {
 
 	return (
 		<Toast type='custom' setShow={setShowOverview}>
-			<Container className='PRODUCT BOX CONTAINET PRODUCT OVERVIEW'>
+			<Container>
 				{showInfoMissing && (
 					<Toast
 						type='warning'
@@ -35,6 +37,13 @@ export function ProductOverview({ setShowOverview }: ProductOverviewProps) {
 						buttonType='both'
 						message='Configure alguns detalhes para conseguir enviar links de pagamento!'
 						continueAction={handleContinue}
+					/>
+				)}
+
+				{showPaymentLink && (
+					<LinkHandler
+						link={paymentLink}
+						setShow={setShowPaymentLink}
 					/>
 				)}
 
@@ -81,10 +90,13 @@ export function ProductOverview({ setShowOverview }: ProductOverviewProps) {
 	}
 
 	function handlePaymentLink() {
+		console.log(user);
 		if (!user?.stripeCompletedProfile) {
+			console.log('show info missing');
 			return setShowInfoMissing(true);
 		}
 		getPaymentLink(products);
+		setShowPaymentLink(true);
 	}
 
 	function handleContinue() {

@@ -65,5 +65,6 @@ export interface User {
 	id: string;
 	name: string;
 	email: string;
+	stripeAccountId: string;
 	stripeCompletedProfile: boolean;
 }

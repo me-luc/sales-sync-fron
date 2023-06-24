@@ -2,6 +2,7 @@
 import { useAuth } from '@/hook';
 import { setApiToken } from '@/service/api';
 import { User } from '@/types';
+import { get } from 'http';
 import { createContext, useEffect, useState } from 'react';
 
 export const AuthenticationContext = createContext({
@@ -9,6 +10,7 @@ export const AuthenticationContext = createContext({
 	setToken: (token: string) => {},
 	finishedLoading: false,
 	user: null as User | null,
+	setUser: (user: User) => {},
 });
 
 export function AuthenticationProvider({
@@ -19,9 +21,9 @@ export function AuthenticationProvider({
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [token, setToken] = useState('');
 	const [finishedLoading, setFinishedLoading] = useState(false);
-	const [user, setUser] = useState<User | null>(null);
+	const [user, setUser] = useState<User>({} as User);
 
-	const { checkToken } = useAuth();
+	const { checkToken, getUserInfo, user: userInfo } = useAuth();
 
 	useEffect(() => {
 		const tokenLoaded = loadToken();
@@ -38,9 +40,17 @@ export function AuthenticationProvider({
 		if (token) {
 			setApiToken(token);
 			localStorage.setItem('token', token);
+			checkToken();
 			setIsAuthenticated(true);
 		}
+		getUserInfo();
 	}, [token]);
+
+	useEffect(() => {
+		if (userInfo) {
+			setUser(userInfo);
+		}
+	}, [userInfo]);
 
 	return (
 		<AuthenticationContext.Provider
@@ -49,6 +59,7 @@ export function AuthenticationProvider({
 				setToken,
 				finishedLoading,
 				user,
+				setUser,
 			}}>
 			{children}
 		</AuthenticationContext.Provider>

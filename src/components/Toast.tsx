@@ -34,7 +34,7 @@ export function Toast({
 		<BlurrBackground onClick={handleClick}>
 			<Background>
 				<ToastWarningIcon type='warning' />
-				<Message>{message}</Message>
+				<ToastMessage>{message}</ToastMessage>
 
 				{buttonType === 'continue' && (
 					<ActionButton
@@ -102,7 +102,7 @@ const Background = styled.div`
 	padding: 50px 25px;
 `;
 
-const Message = styled.span`
+export const ToastMessage = styled.span`
 	font-weight: 500;
 	font-size: 26px;
 	line-height: 125%;
