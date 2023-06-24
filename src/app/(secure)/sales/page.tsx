@@ -6,8 +6,6 @@ import styled from 'styled-components';
 export default function Home() {
 	const { sales } = useSales();
 
-	console.log(sales);
-
 	return (
 		<>
 			{sales.map((sale, index) => {
@@ -15,6 +13,7 @@ export default function Home() {
 					<>
 						<StyledDate key={index}>{sale.date}</StyledDate>
 						<SaleOverview
+							key={sale.id}
 							paymentMethod={sale.paymentMethod}
 							products={sale.saleProducts}
 							totalPrice={sale.totalPrice}

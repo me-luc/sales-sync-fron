@@ -1,11 +1,29 @@
 import styled from 'styled-components';
 import { Logo } from '../Logo';
+import { useRouter } from 'next/navigation';
 
 export default function DestopTopBar() {
+	const router = useRouter();
 	return (
 		<StyledDesktopTopBar>
 			<Logo size={30} className='title-bar' />
-			<></>
+			<MenuOptions>
+				<button onClick={() => router.push('/home')}>Home</button>
+
+				<button onClick={() => router.push('/products')}>
+					Products
+				</button>
+
+				<button onClick={() => router.push('/add-product')}>
+					Add new product
+				</button>
+
+				<button onClick={() => router.push('/sales')}>Sales</button>
+
+				<button onClick={() => router.push('/my-profile')}>
+					Profile
+				</button>
+			</MenuOptions>
 		</StyledDesktopTopBar>
 	);
 }
@@ -26,5 +44,18 @@ const StyledDesktopTopBar = styled.nav`
 
 	.title-bar {
 		margin: 0;
+	}
+`;
+
+const MenuOptions = styled.div`
+	button {
+		color: var(--primary-text-color);
+		text-align: center;
+		font-size: 18px;
+		background: none;
+	}
+
+	button:not(:last-child) {
+		margin-right: 40px;
 	}
 `;
