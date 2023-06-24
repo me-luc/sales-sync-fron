@@ -1,3 +1,4 @@
+'use client';
 import { ArrowFillIcon } from '@/icons';
 import { useState } from 'react';
 import styled from 'styled-components';

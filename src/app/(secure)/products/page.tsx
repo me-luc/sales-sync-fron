@@ -1,12 +1,11 @@
 'use client';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { Product, ProductOverview } from '@/components';
 import { SearchProduct } from '@/components/product/SearchProduct';
-import { ProductsContext } from '@/context/ProductsContext';
 import { useProduct } from '@/hook';
 import { SelectMultipleIcon, ToastSuccessIcon } from '@/icons';
 import { Product as ProductType } from '@/types';
-import { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 
 export default function Page() {
 	const [showOverview, setShowOverview] = useState(false);

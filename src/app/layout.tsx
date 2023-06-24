@@ -1,9 +1,8 @@
 import '@/styles/reset.css';
 import '@/styles/globals.css';
-import { Montserrat, Roboto } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 import { AuthenticationProvider, QueryClientWrapper } from '@/context';
 import 'react-toastify/dist/ReactToastify.css';
-import Head from 'next/head';
 
 const montserrat = Montserrat({
 	subsets: ['latin'],
