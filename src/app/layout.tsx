@@ -35,9 +35,7 @@ export default function RootLayout({
 				<link rel='shortcut icon' href='/favicon.ico' />
 			</head>
 			<QueryClientWrapper>
-				<AuthenticationProvider>
-					<body className={montserrat.className}>{children}</body>
-				</AuthenticationProvider>
+				<body className={montserrat.className}>{children}</body>
 			</QueryClientWrapper>
 		</html>
 	);

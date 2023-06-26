@@ -36,71 +36,86 @@ export default function AddProductPage() {
 	}
 
 	return (
-		<main>
-			<PageTitle backPath='home' title='Add Product' />
-			<StyledImageBox>
-				{photo ? (
-					<StyledImage src={photo} uploadedPhoto />
-				) : (
-					<StyledImage
-						src='/no-product-image.png'
-						alt='Under Construction'
+		<StyledMain>
+			<Container>
+				<PageTitle title='Add Product' backPath='/home' />
+				<StyledImageBox>
+					{photo ? (
+						<StyledImage src={photo} uploadedPhoto />
+					) : (
+						<StyledImage
+							src='/no-product-image.png'
+							alt='Under Construction'
+						/>
+					)}
+				</StyledImageBox>
+
+				<form onSubmit={handleSubmit} encType='multipart/form-data'>
+					<ProductFileInput
+						title='Foto do produto'
+						formData={formData}
+						setPhoto={setPhoto}
+						setFile={setFile}
 					/>
-				)}
-			</StyledImageBox>
-
-			<form onSubmit={handleSubmit} encType='multipart/form-data'>
-				<ProductFileInput
-					title='Foto do produto'
-					formData={formData}
-					setPhoto={setPhoto}
-					setFile={setFile}
-				/>
-				<ProductInput
-					title='Nome do produto'
-					placeholder='NomeDoProduto'
-					type='text'
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-				/>
-				<ProductInput
-					title='Descrição do produto (opcional)'
-					placeholder='Descrição'
-					value={description}
-					onChange={(e) => setDescription(e.target.value)}
-				/>
-				<ProductInput
-					title='Preço do produto R$'
-					placeholder='0,00'
-					type='number'
-					min='1'
-					step='0.10'
-					highlight={true}
-					value={price}
-					onChange={(e) => setPrice(Number(e.target.value))}
-				/>
-				<ProductInput
-					title='Fornecedor (opcional)'
-					value={supplier}
-					onChange={(e) => setSupplier(e.target.value)}
-				/>
-
-				<EndOperationBox>
-					<QuantityInput
-						className={lato.className}
-						placeholder='1'
+					<ProductInput
+						title='Nome do produto'
+						placeholder='NomeDoProduto'
+						type='text'
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+					/>
+					<ProductInput
+						title='Descrição do produto (opcional)'
+						placeholder='Descrição'
+						value={description}
+						onChange={(e) => setDescription(e.target.value)}
+					/>
+					<ProductInput
+						title='Preço do produto R$'
+						placeholder='0,00'
 						type='number'
-						min={1}
-						step={1}
-						value={quantity}
-						onChange={(e) => setQuantity(Number(e.target.value))}
+						min='1'
+						step='0.10'
+						highlight={true}
+						value={price}
+						onChange={(e) => setPrice(Number(e.target.value))}
 					/>
-					<StyledButton type='submit'>Adicionar</StyledButton>
-				</EndOperationBox>
-			</form>
-		</main>
+					<ProductInput
+						title='Fornecedor (opcional)'
+						value={supplier}
+						onChange={(e) => setSupplier(e.target.value)}
+					/>
+
+					<EndOperationBox>
+						<QuantityInput
+							className={lato.className}
+							placeholder='1'
+							type='number'
+							min={1}
+							step={1}
+							value={quantity}
+							onChange={(e) =>
+								setQuantity(Number(e.target.value))
+							}
+						/>
+						<StyledButton type='submit'>Adicionar</StyledButton>
+					</EndOperationBox>
+				</form>
+			</Container>
+		</StyledMain>
 	);
 }
+
+const StyledMain = styled.main`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`;
+
+const Container = styled.div`
+	width: 100%;
+	max-width: 720px;
+`;
 
 const StyledImageBox = styled.div`
 	width: 100%;

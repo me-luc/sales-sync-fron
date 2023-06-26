@@ -48,7 +48,6 @@ export function useAuth() {
 		},
 		onError: (error: AxiosError) => {
 			tokenError = error;
-			toast.error('Faça login novamente!');
 			return router.push('/sign-in');
 		},
 	});
@@ -87,9 +86,6 @@ export function useAuth() {
 	const { mutate: getUserInfo } = useMutation(() => authApi.getUserInfo(), {
 		onSuccess: (data) => {
 			setUser(data.data);
-		},
-		onError: (error: AxiosError) => {
-			toast.error('Erro ao obter informações do usuário!');
 		},
 	});
 
